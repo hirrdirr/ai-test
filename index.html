@@ -1,1 +1,52 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Dagsinfo</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
+    .chatbox { background: white; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .messages { height: 300px; overflow-y: auto; margin-bottom: 10px; border: 1px solid #ddd; padding: 10px; border-radius: 5px; background: #fff; }
+    .message { margin: 5px 0; }
+    .user { text-align: right; color: blue; }
+    .ai { text-align: left; color: green; }
+    input[type="text"] { width: 80%; padding: 10px; }
+    button { padding: 10px; }
+  </style>
+</head>
+<body>
+  <div class="chatbox">
+    <h2>AI Dagsinfo</h2>
+    <div class="messages" id="messages"></div>
+    <input type="text" id="userInput" placeholder="Skriv t.ex. 'Jag befinner mig i Linköping'" />
+    <button onclick="sendMessage()">Skicka</button>
+  </div>
+
+  <script>
+    function sendMessage() {
+      const input = document.getElementById("userInput");
+      const msg = input.value.trim();
+      if (msg === "") return;
+
+      const messagesDiv = document.getElementById("messages");
+      messagesDiv.innerHTML += `<div class="message user">${msg}</div>`;
+
+      // Enkel AI-fejkad respons
+      let response = "";
+      if (msg.toLowerCase().includes("linköping")) {
+        response = "I Linköping idag kan du bo på Quality Hotel The Box (från 1200 kr/natt). Evenemang: Sommarbio i Trädgårdsföreningen kl 20:00 🎬";
+      } else {
+        response = "Skriv gärna vilken ort du befinner dig i, t.ex. 'Jag är i Göteborg'.";
+      }
+
+      setTimeout(() => {
+        messagesDiv.innerHTML += `<div class="message ai">${response}</div>`;
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }, 500);
+
+      input.value = "";
+    }
+  </script>
+</body>
+</html>
 

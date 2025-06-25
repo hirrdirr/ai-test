@@ -72,10 +72,12 @@
       padding: 5px 10px;
       cursor: pointer;
     }
-    .suggestion-item:hover {
+    .suggestion-item:hover,
+    .suggestion-item.active {
       background-color: #eee;
     }
-    .dark-mode .suggestion-item:hover {
+    .dark-mode .suggestion-item:hover,
+    .dark-mode .suggestion-item.active {
       background-color: #444;
     }
     .dark-toggle {
@@ -98,11 +100,15 @@
 
   <script>
     const backendUrl = "https://ortmatch-backend.onrender.com";
+    let selectedSuggestionIndex = -1;
+    let currentSuggestions = [];
 
     function fetchSuggestions() {
       const input = document.getElementById("userInput").value;
+      selectedSuggestionIndex = -1;
       if (input.length < 2) {
         document.getElementById("suggestions").innerHTML = "";
+        currentSuggestions = [];
         return;
       }
 
@@ -111,17 +117,26 @@
         .then(data => {
           const suggestionsDiv = document.getElementById("suggestions");
           suggestionsDiv.innerHTML = "";
-          data.matches.forEach(match => {
+          currentSuggestions = data.matches;
+          data.matches.forEach((match, index) => {
             const div = document.createElement("div");
             div.textContent = match;
             div.className = "suggestion-item";
+            div.dataset.index = index;
             div.onclick = () => {
               document.getElementById("userInput").value = match;
               suggestionsDiv.innerHTML = "";
+              sendMessage();
             };
             suggestionsDiv.appendChild(div);
           });
         });
+    }
+
+    function highlightSuggestion() {
+      document.querySelectorAll(".suggestion-item").forEach((item, index) => {
+        item.classList.toggle("active", index === selectedSuggestionIndex);
+      });
     }
 
     function sendMessage() {
@@ -140,12 +155,31 @@
       }, 500);
 
       input.value = "";
+      currentSuggestions = [];
+      selectedSuggestionIndex = -1;
       document.getElementById("suggestions").innerHTML = "";
     }
 
     function handleKey(event) {
-      if (event.key === "Enter") {
+      const suggestions = document.querySelectorAll(".suggestion-item");
+
+      if (event.key === "ArrowDown") {
         event.preventDefault();
+        if (selectedSuggestionIndex < suggestions.length - 1) {
+          selectedSuggestionIndex++;
+          highlightSuggestion();
+        }
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        if (selectedSuggestionIndex > 0) {
+          selectedSuggestionIndex--;
+          highlightSuggestion();
+        }
+      } else if (event.key === "Enter") {
+        event.preventDefault();
+        if (selectedSuggestionIndex >= 0 && selectedSuggestionIndex < currentSuggestions.length) {
+          document.getElementById("userInput").value = currentSuggestions[selectedSuggestionIndex];
+        }
         sendMessage();
       }
     }
@@ -155,10 +189,8 @@
       localStorage.setItem("dark-mode", isDark ? "enabled" : "disabled");
     }
 
-    // 🧠 Kom ihåg användarens val
     window.onload = () => {
-      const savedMode = localStorage.getItem("dark-mode");
-      if (savedMode === "enabled") {
+      if (localStorage.getItem("dark-mode") === "enabled") {
         document.body.classList.add("dark-mode");
       }
     };

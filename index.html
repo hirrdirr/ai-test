@@ -97,7 +97,7 @@
   </div>
 
   <script>
-    const backendUrl = "https://ortmatch-backend.onrender.com"; // Ändra till din backend-URL
+    const backendUrl = "https://ortmatch-backend.onrender.com";
 
     function fetchSuggestions() {
       const input = document.getElementById("userInput").value;
@@ -151,8 +151,17 @@
     }
 
     function toggleDarkMode() {
-      document.body.classList.toggle("dark-mode");
+      const isDark = document.body.classList.toggle("dark-mode");
+      localStorage.setItem("dark-mode", isDark ? "enabled" : "disabled");
     }
+
+    // 🧠 Kom ihåg användarens val
+    window.onload = () => {
+      const savedMode = localStorage.getItem("dark-mode");
+      if (savedMode === "enabled") {
+        document.body.classList.add("dark-mode");
+      }
+    };
   </script>
 </body>
 </html>

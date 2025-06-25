@@ -12,17 +12,48 @@
     .ai { text-align: left; color: green; }
     input[type="text"] { width: 80%; padding: 10px; }
     button { padding: 10px; }
+    #suggestions { background: #fff; border: 1px solid #ccc; border-radius: 4px; max-height: 150px; overflow-y: auto; margin-top: 5px; }
+    .suggestion-item { padding: 5px 10px; cursor: pointer; }
+    .suggestion-item:hover { background-color: #f0f0f0; }
   </style>
 </head>
 <body>
   <div class="chatbox">
     <h2>AI Dagsinfo</h2>
     <div class="messages" id="messages"></div>
-    <input type="text" id="userInput" placeholder="Skriv t.ex. 'Jag befinner mig i Linköping'" />
+    <input type="text" id="userInput" placeholder="Skriv ort, t.ex. 'Linköping'" oninput="fetchSuggestions()" />
     <button onclick="sendMessage()">Skicka</button>
+    <div id="suggestions"></div>
   </div>
 
   <script>
+    const backendUrl = "https://ortmatch-backend.onrender.com"; // Byt ut om din URL är annan
+
+    function fetchSuggestions() {
+      const input = document.getElementById("userInput").value;
+      if (input.length < 2) {
+        document.getElementById("suggestions").innerHTML = "";
+        return;
+      }
+
+      fetch(`${backendUrl}/match_ort?q=${encodeURIComponent(input)}`)
+        .then(res => res.json())
+        .then(data => {
+          const suggestionsDiv = document.getElementById("suggestions");
+          suggestionsDiv.innerHTML = "";
+          data.matches.forEach(match => {
+            const div = document.createElement("div");
+            div.textContent = match;
+            div.className = "suggestion-item";
+            div.onclick = () => {
+              document.getElementById("userInput").value = match;
+              suggestionsDiv.innerHTML = "";
+            };
+            suggestionsDiv.appendChild(div);
+          });
+        });
+    }
+
     function sendMessage() {
       const input = document.getElementById("userInput");
       const msg = input.value.trim();
@@ -31,13 +62,7 @@
       const messagesDiv = document.getElementById("messages");
       messagesDiv.innerHTML += `<div class="message user">${msg}</div>`;
 
-      // Enkel AI-fejkad respons
-      let response = "";
-      if (msg.toLowerCase().includes("linköping")) {
-        response = "I Linköping idag kan du bo på Quality Hotel The Box (från 1200 kr/natt). Evenemang: Sommarbio i Trädgårdsföreningen kl 20:00 🎬";
-      } else {
-        response = "Skriv gärna vilken ort du befinner dig i, t.ex. 'Jag är i Göteborg'.";
-      }
+      const response = `Du valde orten ${msg}. (Här kan vi senare visa evenemang och boendeinfo.)`;
 
       setTimeout(() => {
         messagesDiv.innerHTML += `<div class="message ai">${response}</div>`;
@@ -45,8 +70,8 @@
       }, 500);
 
       input.value = "";
+      document.getElementById("suggestions").innerHTML = "";
     }
   </script>
 </body>
 </html>
-

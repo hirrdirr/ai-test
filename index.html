@@ -4,21 +4,91 @@
   <meta charset="UTF-8">
   <title>AI Dagsinfo</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
-    .chatbox { background: white; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    .messages { height: 300px; overflow-y: auto; margin-bottom: 10px; border: 1px solid #ddd; padding: 10px; border-radius: 5px; background: #fff; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+      transition: background 0.3s, color 0.3s;
+    }
+    .dark-mode {
+      background: #121212;
+      color: #f4f4f4;
+    }
+    .chatbox {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      transition: background 0.3s, color 0.3s;
+    }
+    .dark-mode .chatbox {
+      background: #1e1e1e;
+      color: #f4f4f4;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+    .messages {
+      height: 300px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 5px;
+      background: #fff;
+      transition: background 0.3s;
+    }
+    .dark-mode .messages {
+      background: #2b2b2b;
+      border-color: #444;
+    }
     .message { margin: 5px 0; }
-    .user { text-align: right; color: blue; }
-    .ai { text-align: left; color: green; }
-    input[type="text"] { width: 80%; padding: 10px; }
-    button { padding: 10px; }
-    #suggestions { background: #fff; border: 1px solid #ccc; border-radius: 4px; max-height: 150px; overflow-y: auto; margin-top: 5px; }
-    .suggestion-item { padding: 5px 10px; cursor: pointer; }
-    .suggestion-item:hover { background-color: #f0f0f0; }
+    .user { text-align: right; color: #66aaff; }
+    .ai { text-align: left; color: #4caf50; }
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #suggestions {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      max-height: 150px;
+      overflow-y: auto;
+      margin-top: 5px;
+    }
+    .dark-mode #suggestions {
+      background: #2b2b2b;
+      color: #fff;
+      border-color: #555;
+    }
+    .suggestion-item {
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .suggestion-item:hover {
+      background-color: #eee;
+    }
+    .dark-mode .suggestion-item:hover {
+      background-color: #444;
+    }
+    .dark-toggle {
+      margin-bottom: 15px;
+      text-align: right;
+    }
   </style>
 </head>
 <body>
   <div class="chatbox">
+    <div class="dark-toggle">
+      <button onclick="toggleDarkMode()">🌙 / ☀️</button>
+    </div>
     <h2>AI Dagsinfo</h2>
     <div class="messages" id="messages"></div>
     <input type="text" id="userInput" placeholder="Skriv ort, t.ex. 'Linköping'" oninput="fetchSuggestions()" onkeydown="handleKey(event)" />
@@ -27,7 +97,7 @@
   </div>
 
   <script>
-    const backendUrl = "https://ortmatch-backend.onrender.com"; // Byt till din backend-url om den är annorlunda
+    const backendUrl = "https://ortmatch-backend.onrender.com"; // Ändra till din backend-URL
 
     function fetchSuggestions() {
       const input = document.getElementById("userInput").value;
@@ -78,6 +148,10 @@
         event.preventDefault();
         sendMessage();
       }
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
     }
   </script>
 </body>

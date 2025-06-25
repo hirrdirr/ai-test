@@ -136,6 +136,9 @@
     function highlightSuggestion() {
       document.querySelectorAll(".suggestion-item").forEach((item, index) => {
         item.classList.toggle("active", index === selectedSuggestionIndex);
+        if (index === selectedSuggestionIndex) {
+          item.scrollIntoView({ block: "nearest" });
+        }
       });
     }
 

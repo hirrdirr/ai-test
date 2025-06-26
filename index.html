@@ -6,29 +6,44 @@
   <title>AI Dagsinfo</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #f6f7f8;
+      --text: #333;
+      --card-bg: #ffffff;
+      --border: #ddd;
+      --primary: #4a90e2;
+      --primary-hover: #357abd;
+      --user-color: #4a90e2;
+      --ai-color: #2e8b57;
+      --suggestion-hover: #f0f1f3;
+    }
     body {
       font-family: 'Inter', sans-serif;
       padding: 20px;
       margin: 0;
-      background: #f8f9fa;
+      background: var(--bg);
+      color: var(--text);
       transition: background 0.3s, color 0.3s;
     }
     .dark-mode {
-      background: #121212;
-      color: #f4f4f4;
+      --bg: #121212;
+      --text: #f4f4f4;
+      --card-bg: #1e1e1e;
+      --border: #444;
+      --primary: #66aaff;
+      --primary-hover: #5599dd;
+      --user-color: #66aaff;
+      --ai-color: #4caf50;
+      --suggestion-hover: #333;
     }
     .chatbox {
-      background: #ffffff;
+      background: var(--card-bg);
       padding: 30px;
       border-radius: 16px;
       max-width: 640px;
       margin: 40px auto;
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
       transition: background 0.3s, color 0.3s;
-    }
-    .dark-mode .chatbox {
-      background: #1e1e1e;
-      color: #f4f4f4;
     }
     h2 {
       text-align: center;
@@ -38,14 +53,13 @@
       height: 300px;
       overflow-y: auto;
       margin-bottom: 15px;
-      border: 1px solid #ddd;
+      border: 1px solid var(--border);
       padding: 15px;
       border-radius: 8px;
-      background: #fefefe;
+      background: #fff;
     }
     .dark-mode .messages {
       background: #2a2a2a;
-      border-color: #444;
     }
     .message {
       margin: 10px 0;
@@ -59,11 +73,11 @@
     }
     .user {
       text-align: right;
-      color: #0d6efd;
+      color: var(--user-color);
     }
     .ai {
       text-align: left;
-      color: #20c997;
+      color: var(--ai-color);
     }
     .loader {
       text-align: center;
@@ -91,7 +105,7 @@
       padding: 12px 20px;
       border: none;
       border-radius: 8px;
-      background-color: #0d6efd;
+      background-color: var(--primary);
       color: white;
       font-weight: 600;
       cursor: pointer;
@@ -99,20 +113,15 @@
       transition: background-color 0.3s ease;
     }
     button:hover {
-      background-color: #0b5ed7;
+      background-color: var(--primary-hover);
     }
     #suggestions {
-      background: #fff;
-      border: 1px solid #ccc;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
       border-radius: 8px;
       max-height: 150px;
       overflow-y: auto;
       margin-top: 8px;
-    }
-    .dark-mode #suggestions {
-      background: #2a2a2a;
-      color: #fff;
-      border-color: #555;
     }
     .suggestion-item {
       padding: 10px 15px;
@@ -121,11 +130,7 @@
     }
     .suggestion-item:hover,
     .suggestion-item.active {
-      background-color: #e9ecef;
-    }
-    .dark-mode .suggestion-item:hover,
-    .dark-mode .suggestion-item.active {
-      background-color: #444;
+      background-color: var(--suggestion-hover);
     }
     .dark-toggle {
       text-align: right;

@@ -257,10 +257,9 @@
       }
 
       document.addEventListener("click", (e) => {
-        const input = document.getElementById("userInput");
-        const suggestions = document.getElementById("suggestions");
-        if (!input.contains(e.target) && !suggestions.contains(e.target)) {
-          suggestions.innerHTML = "";
+        const clickedInside = e.target.closest('#userInput') || e.target.closest('#suggestions');
+        if (!clickedInside) {
+          document.getElementById("suggestions").innerHTML = "";
         }
       });
     };

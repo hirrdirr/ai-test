@@ -257,8 +257,9 @@
       }
 
       document.addEventListener("click", (e) => {
+        const input = document.getElementById("userInput");
         const suggestions = document.getElementById("suggestions");
-        if (!document.getElementById("userInput").contains(e.target)) {
+        if (!input.contains(e.target) && !suggestions.contains(e.target)) {
           suggestions.innerHTML = "";
         }
       });

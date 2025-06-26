@@ -49,6 +49,13 @@
     }
     .message {
       margin: 10px 0;
+      opacity: 0;
+      animation: fadeIn 0.4s ease forwards;
+    }
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
     }
     .user {
       text-align: right;
@@ -57,6 +64,20 @@
     .ai {
       text-align: left;
       color: #20c997;
+    }
+    .loader {
+      text-align: center;
+      padding: 10px;
+    }
+    .loader::after {
+      content: '...';
+      display: inline-block;
+      animation: dots 1s steps(3, end) infinite;
+    }
+    @keyframes dots {
+      0%, 20% { content: '.'; }
+      40% { content: '..'; }
+      60%, 100% { content: '...'; }
     }
     input[type="text"] {
       width: 100%;
@@ -109,6 +130,12 @@
     .dark-toggle {
       text-align: right;
     }
+    @media (max-width: 600px) {
+      .chatbox {
+        padding: 20px;
+        margin: 20px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -118,9 +145,9 @@
     </div>
     <h2>AI Dagsinfo</h2>
     <div class="messages" id="messages"></div>
-    <input type="text" id="userInput" placeholder="Skriv ort, t.ex. 'Linköping'" oninput="fetchSuggestions()" onkeydown="handleKey(event)" />
+    <input type="text" id="userInput" placeholder="Skriv ort, t.ex. 'Linköping'" oninput="fetchSuggestions()" onkeydown="handleKey(event)" autofocus />
     <button onclick="sendMessage()">Skicka</button>
-    <div id="suggestions"></div>
+    <div id="suggestions" role="listbox" aria-label="Ortförslag"></div>
   </div>
   <script>
     const backendUrl = "https://ortmatch-backend.onrender.com";
@@ -146,6 +173,7 @@
             const div = document.createElement("div");
             div.textContent = match;
             div.className = "suggestion-item";
+            div.setAttribute("role", "option");
             div.dataset.index = index;
             div.onclick = () => {
               document.getElementById("userInput").value = match;
@@ -174,12 +202,18 @@
       const messagesDiv = document.getElementById("messages");
       messagesDiv.innerHTML += `<div class="message user">${msg}</div>`;
 
-      const response = `Du valde orten ${msg}. (Här kan vi senare visa evenemang och boendeinfo.)`;
+      const loader = document.createElement("div");
+      loader.className = "loader message ai";
+      loader.id = "loader";
+      messagesDiv.appendChild(loader);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
       setTimeout(() => {
+        document.getElementById("loader").remove();
+        const response = `Du valde orten ${msg}. (Här kan vi senare visa evenemang och boendeinfo.)`;
         messagesDiv.innerHTML += `<div class="message ai">${response}</div>`;
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
-      }, 500);
+      }, 1000);
 
       input.value = "";
       currentSuggestions = [];
@@ -206,6 +240,7 @@
         event.preventDefault();
         if (selectedSuggestionIndex >= 0 && selectedSuggestionIndex < currentSuggestions.length) {
           document.getElementById("userInput").value = currentSuggestions[selectedSuggestionIndex];
+          document.getElementById("suggestions").innerHTML = "";
         }
         sendMessage();
       }
@@ -220,6 +255,13 @@
       if (localStorage.getItem("dark-mode") === "enabled") {
         document.body.classList.add("dark-mode");
       }
+
+      document.addEventListener("click", (e) => {
+        const suggestions = document.getElementById("suggestions");
+        if (!document.getElementById("userInput").contains(e.target)) {
+          suggestions.innerHTML = "";
+        }
+      });
     };
   </script>
 </body>

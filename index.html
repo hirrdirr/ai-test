@@ -97,9 +97,12 @@
       width: 100%;
       padding: 12px;
       border-radius: 8px;
-      border: 1px solid #ccc;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text);
       margin-top: 5px;
       font-size: 16px;
+      transition: background 0.3s, color 0.3s;
     }
     button {
       padding: 12px 20px;
@@ -117,11 +120,14 @@
     }
     #suggestions {
       background: var(--card-bg);
+      color: var(--text);
       border: 1px solid var(--border);
       border-radius: 8px;
       max-height: 150px;
       overflow-y: auto;
       margin-top: 8px;
+      position: relative;
+      z-index: 2;
     }
     .suggestion-item {
       padding: 10px 15px;

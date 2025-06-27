@@ -155,16 +155,16 @@
 <body>
   <div class="chatbox">
     <div class="dark-toggle">
-      <button onclick="toggleDarkMode()">🌙 / ☀️</button>
+      <button id=\"darkModeBtn\" onclick=\"toggleDarkMode()\">🌙</button>
     </div>
     <h2>AI Dagsinfo</h2>
     <div class="messages" id="messages"></div>
-    <p style="margin-top: 10px; font-weight: 500;">Jag befinner mig i:</p>
+    <p style="margin-top: 10px; font-weight: 500;">📍 Jag befinner mig i:</p>
     <div style="position: relative;">
       <input type="text" id="userInput" placeholder="Skriv ort, t.ex. 'Linköping'" oninput="fetchSuggestions()" onkeydown="handleKey(event)" autofocus />
       <div id="suggestions" role="listbox" aria-label="Ortförslag"></div>
-    </div>
-    <button onclick="sendMessage()">Skicka</button></div>
+      <button style="position: relative; z-index: 1; margin-top: 12px; width: 100%;" onclick="sendMessage()">Skicka</button>
+    </div></div>
   </div>
   <script>
     const backendUrl = "https://ortmatch-backend.onrender.com";
@@ -217,7 +217,7 @@
       if (msg === "") return;
 
       const messagesDiv = document.getElementById("messages");
-      messagesDiv.innerHTML += `<div class="message user">${msg}</div>`;
+      messagesDiv.innerHTML += `<div class=\"message user\">🙋 ${msg}</div>`;
 
       const loader = document.createElement("div");
       loader.className = "loader message ai";
@@ -228,7 +228,7 @@
       setTimeout(() => {
         document.getElementById("loader").remove();
         const response = `Du valde orten ${msg}. (Här kan vi senare visa evenemang och boendeinfo.)`;
-        messagesDiv.innerHTML += `<div class="message ai">${response}</div>`;
+        messagesDiv.innerHTML += `<div class=\"message ai\">🤖 ${response}</div>`;
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
       }, 1000);
 
@@ -266,11 +266,13 @@
     function toggleDarkMode() {
       const isDark = document.body.classList.toggle("dark-mode");
       localStorage.setItem("dark-mode", isDark ? "enabled" : "disabled");
+      document.getElementById("darkModeBtn").textContent = isDark ? "☀️" : "🌙";
     }
 
     window.onload = () => {
       if (localStorage.getItem("dark-mode") === "enabled") {
         document.body.classList.add("dark-mode");
+        document.getElementById("darkModeBtn").textContent = "☀️";
       }
 
       document.addEventListener("click", (e) => {

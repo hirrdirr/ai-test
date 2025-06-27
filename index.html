@@ -160,10 +160,11 @@
     <h2>AI Dagsinfo</h2>
     <div class="messages" id="messages"></div>
     <p style="margin-top: 10px; font-weight: 500;">📍 Jag befinner mig i:</p>
-    <div style="position: relative;">
+    <div style="position: relative; margin-bottom: 16px;">
       <input type="text" id="userInput" placeholder="Skriv ort, t.ex. 'Linköping'" oninput="fetchSuggestions()" onkeydown="handleKey(event)" autofocus />
       <div id="suggestions" role="listbox" aria-label="Ortförslag"></div>
-      <button style="position: relative; z-index: 1; margin-top: 12px; width: 100%;" onclick="sendMessage()">Skicka</button>
+    </div>
+    <button onclick="sendMessage()">Skicka</button>
     </div></div>
   </div>
   <script>

@@ -156,9 +156,11 @@
     </div>
     <h2>AI Dagsinfo</h2>
     <div class="messages" id="messages"></div>
-    <input type="text" id="userInput" placeholder="Skriv ort, t.ex. 'Linköping'" oninput="fetchSuggestions()" onkeydown="handleKey(event)" autofocus />
-    <button onclick="sendMessage()">Skicka</button>
-    <div id="suggestions" role="listbox" aria-label="Ortförslag"></div>
+    <div style="position: relative;">
+      <input type="text" id="userInput" placeholder="Skriv ort, t.ex. 'Linköping'" oninput="fetchSuggestions()" onkeydown="handleKey(event)" autofocus />
+      <div id="suggestions" role="listbox" aria-label="Ortförslag" style="position: absolute; top: 100%; left: 0; width: 100%;"></div>
+    </div>
+    <button onclick="sendMessage()">Skicka</button></div>
   </div>
   <script>
     const backendUrl = "https://ortmatch-backend.onrender.com";
